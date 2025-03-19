@@ -52,7 +52,7 @@ function App() {
                 break;
               case "/":
                 if (numbers[i + 1] === 0) { // 0으로 나누면 나눗셈 오류 발생. 그래서 따로 처리
-                  const errorMessage = "애러: 0으로 나눌 수  없습니다. ";
+                  const errorMessage = "애러: Zero Division.";
                   setMessages([...newMessages, { sender: "bot", text: errorMessage }]);
                   return;
                 }
