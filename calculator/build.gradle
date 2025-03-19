@@ -1,0 +1,30 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.3'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.LSYTesting'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' //동적으로 HTML 랜더링
+	implementation 'org.springframework.boot:spring-boot-starter'       // 기본 Spring Boot 기능
+	implementation 'org.springframework.boot:spring-boot-starter-web'   // 웹 애플리케이션 실행을 위한 의존성
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'          // 테스트 런타임
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
