@@ -4,34 +4,30 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
-  // 메시지 추가 및 API 호출 함수
   const handleSendMessage = async () => {
     if (!input.trim()) return;
 
-    // 사용자 입력 메시지 추가
     const newMessages = [...messages, { sender: "user", text: input }];
     setMessages(newMessages);
     setInput("");
 
     try {
-      // 수식에서 숫자와 연산자 추출
       const operationRegex = /(-?\d+(\.\d+)?)\s*([+\-*/])?\s*/g;
       const matches = [...input.matchAll(operationRegex)];
       const numbers = [];
       const operators = [];
+
       for (let i = 0; i < matches.length; i++) {
         if (matches[i][1]) numbers.push(parseFloat(matches[i][1]));
         if (matches[i][3]) operators.push(matches[i][3]);
       }
 
-      // 숫자와 연산자의 개수 확인
       if (numbers.length < 2 || numbers.length !== operators.length + 1) {
         const errorMessage = "입력 예시: (e.g., 5 + 6 ). 최대 10개까지의 연산이 가능합니다.";
         setMessages([...newMessages, { sender: "bot", text: errorMessage }]);
         return;
       }
 
-      // 연산자에 맞게 스프링 부트 API에 전달할 operation 정의
       const operationMap = {
         "+": "add",
         "-": "subtract",
@@ -39,33 +35,31 @@ function App() {
         "/": "divide",
       };
 
-      // 첫 번째 값을 기본값으로 설정
       let result = numbers[0];
 
       for (let i = 0; i < operators.length; i++) {
         const operation = operationMap[operators[i]];
+
         if (!operation) {
           setMessages([...newMessages, { sender: "bot", text: "잘못된 연산자입니다." }]);
           return;
         }
 
-        // API 호출
+        // Render에서 배포된 Spring Boot API URL 사용
         const response = await fetch(
-          `http://localhost:8080/calculate?num1=${result}&operation=${operation}&num2=${numbers[i + 1]}`
+          `https://chattingcalculator.onrender.com/calculate?num1=${result}&operation=${operation}&num2=${numbers[i + 1]}`
         );
         const apiResult = await response.text();
-
-        // 새로 계산된 값을 result에 업데이트
         result = parseFloat(apiResult);
       }
 
-      // 최종 결과 메시지 추가
       setMessages([...newMessages, { sender: "bot", text: `결과: ${result}` }]);
     } catch (error) {
       console.error("API 호출 중 오류 발생:", error);
       setMessages([...newMessages, { sender: "bot", text: "연산 중 문제가 발생하였습니다." }]);
     }
   };
+
 
   return (
     <div className="chat-container">

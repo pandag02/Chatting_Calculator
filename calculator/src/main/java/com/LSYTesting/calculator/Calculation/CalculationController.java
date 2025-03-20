@@ -1,7 +1,6 @@
 package com.LSYTesting.calculator.Calculation;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CalculationController {
 
+    @CrossOrigin(origins = "https://chatting-calculator.vercel.app/")
     @GetMapping("/calculate")
     public String calculate(
             @RequestParam double num1,
@@ -16,7 +16,6 @@ public class CalculationController {
             @RequestParam double num2) {
 
         double result = 0;
-        String error = null;
 
         switch (operation) {
             case "add":
